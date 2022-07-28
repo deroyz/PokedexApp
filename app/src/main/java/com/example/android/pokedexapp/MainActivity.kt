@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -65,5 +66,10 @@ class MainActivity : ComponentActivity() {
 
 sealed class DestinationScreen(val route: String) {
     object PokemonList : DestinationScreen("pokemon_list_screen")
-    object PokemonDetail : DestinationScreen("pokemon_detail_screen/{dominantColor}/{pokemonName}")
+    object PokemonDetail :
+        DestinationScreen("pokemon_detail_screen/{dominantColor}/{pokemonName}") {
+        fun createRoute(dominantColor: Color, pokemonName: String) =
+            "pokemon_detail_screen/${dominantColor.toArgb()}/$pokemonName"
+    }
+
 }
