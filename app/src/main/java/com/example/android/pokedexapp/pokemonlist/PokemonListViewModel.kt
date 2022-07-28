@@ -14,6 +14,7 @@ import com.example.android.pokedexapp.repository.PokemonRepository
 import com.example.android.pokedexapp.util.Constants.PAGE_SIZE
 import com.example.android.pokedexapp.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -29,8 +30,51 @@ class PokemonListViewModel @Inject constructor(
     var isLoading = mutableStateOf(false)
     var endReached = mutableStateOf(false)
 
+    private var cachedPokemonList = listOf<PokedexListEntry>()
+    private var isSearchStarting = true
+    var isSearching = mutableStateOf(false)
+
     init {
         loadPokemonPaginate()
+    }
+
+    fun searchPokemonList(query: String) {
+
+        // If searching is started load updated pokemon list otherwise cached pokemon list
+        val listToSearch = if (isSearchStarting) {
+            pokemonList.value
+        } else {
+            cachedPokemonList
+        }
+
+        // Coroutine applied to look up the list if it contains query
+        viewModelScope.launch(Dispatchers.Default) {
+
+            // As user first click the search bar, it triggers isSearchStarting and cacheing the current list.
+            if (isSearchStarting) {
+                cachedPokemonList = pokemonList.value
+                isSearchStarting = false
+            }
+
+            // State user click search bar but no input yet
+            if (query.isEmpty()) {
+                pokemonList.value = cachedPokemonList
+                isSearching.value = false
+                isSearchStarting = true
+                return@launch
+            }
+
+            // Get the result list matches with input query
+            val results = listToSearch.filter {
+                it.pokemonName.contains(query.trim(), ignoreCase = true) ||
+                        it.number.toString() == query.trim()
+            }
+
+            // Update pokemon list from the result with input query
+            pokemonList.value = results
+
+            isSearching.value = true
+        }
     }
 
     fun loadPokemonPaginate() {
