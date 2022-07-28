@@ -1,4 +1,4 @@
-package com.plcoding.jetpackcomposepokedex.data.remote.responses
+package com.example.android.pokedexapp.data.remote.responses
 
 
 import com.google.gson.annotations.SerializedName

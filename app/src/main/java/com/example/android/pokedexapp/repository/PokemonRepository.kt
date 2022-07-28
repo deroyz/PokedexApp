@@ -2,8 +2,8 @@ package com.example.android.pokedexapp.repository
 
 import com.example.android.pokedexapp.data.remote.PokeApi
 import com.example.android.pokedexapp.util.Resource
-import com.plcoding.jetpackcomposepokedex.data.remote.responses.Pokemon
-import com.plcoding.jetpackcomposepokedex.data.remote.responses.PokemonList
+import com.example.android.pokedexapp.data.remote.responses.Pokemon
+import com.example.android.pokedexapp.data.remote.responses.PokemonList
 import dagger.hilt.android.scopes.ActivityScoped
 import javax.inject.Inject
 
