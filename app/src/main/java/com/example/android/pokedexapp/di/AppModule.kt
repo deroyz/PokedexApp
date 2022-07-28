@@ -19,9 +19,7 @@ object AppModule {
     @Singleton
     fun providePokemonRepository(
         api: PokeApi
-    ) {
-        PokemonRepository(api)
-    }
+    ) = PokemonRepository(api)
 
     fun providePokeApi(): PokeApi{
         return Retrofit.Builder()

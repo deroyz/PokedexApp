@@ -17,6 +17,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navArgument
 import androidx.navigation.compose.rememberNavController
+import com.example.android.pokedexapp.pokemonlist.PokemonListScreen
 import com.example.android.pokedexapp.ui.theme.PokedexAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -26,14 +27,15 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             PokedexAppTheme {
-                rememberNavController()
+
                 val navController = rememberNavController()
+
                 NavHost(
                     navController = navController,
                     startDestination = DestinationScreen.PokemonList.route
                 ) {
                     composable(DestinationScreen.PokemonList.route) {
-
+                        PokemonListScreen(navController = navController)
                     }
 
                     composable(DestinationScreen.PokemonDetail.route,
@@ -48,9 +50,9 @@ class MainActivity : ComponentActivity() {
                     ) {
                         val dominantColor = remember {
                             val color = it.arguments?.getInt("dominantColor")
-                            color?.let {Color(it)} ?: Color.White
-                            }
-                        val pokemonName = remember{
+                            color?.let { Color(it) } ?: Color.White
+                        }
+                        val pokemonName = remember {
                             it.arguments?.getString("pokemonName")
                         }
                     }
